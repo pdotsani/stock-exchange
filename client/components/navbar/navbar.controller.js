@@ -6,9 +6,15 @@ angular.module('stockExchangeApp')
     $scope.stockSymbol;
 
     $scope.getStock = function() {
+
       console.log($scope.stockSymbol);
       stockName.setStockName($scope.stockSymbol);
-      var url = 'https://www.quandl.com/api/v1/datasets/WIKI/'+$scope.stockSymbol+'.json?auth_token=6sdNsBCy4WWysKcaugbZ&trim_start='+yearSpan.preDate()+'&trim_end='+yearSpan.curDate()+'&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff'
+      
+      var url = 'https://www.quandl.com/api/v1/datasets/WIKI/'+
+      $scope.stockSymbol+'.json?auth_token=6sdNsBCy4WWysKcaugbZ&trim_start='+
+      yearSpan.preDate()+'&trim_end='+yearSpan.curDate()+
+      '&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff';
+
       $http.get(url).success(function(data){
         console.log(data);
         
@@ -20,6 +26,7 @@ angular.module('stockExchangeApp')
         alert('Enter a valid stock symbol')
         $scope.stockSymbol = '';
       });
+
     };
 
     $scope.removeStock = function(stock) {
@@ -31,10 +38,14 @@ angular.module('stockExchangeApp')
     };
 
     $scope.$on('getStock', function(){
-      $http.get('/api/stockDatas').success(function(data){
+      $http.get('/api/stockDatas/').success(function(data){
         $scope.stocks = data;
         console.log($scope.stocks);
-      })
+        $scope.stocks.forEach(function(stock){
+          stockDataToDB.sendName(stock._id);
+        });
+      });
+
     });
 
     $rootScope.$broadcast('getStock');
