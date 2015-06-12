@@ -4,8 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var StockDataSchema = new Schema({
-  stockname: String,
-  allData: [Number]
+  _id: String
 });
 
 module.exports = mongoose.model('StockData', StockDataSchema);

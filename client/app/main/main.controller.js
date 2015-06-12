@@ -1,22 +1,14 @@
 'use strict';
 
 angular.module('stockExchangeApp')
-  .controller('MainCtrl', function ($scope, $http, stockName) {
+  .controller('MainCtrl', function ($scope, $http, stockName, yearSpan, $route) {
     
-    $scope.chartData = [];
 
     // Get current date
 
     $scope.getStockData = function(stock) {
-      var d = new Date;
-      var pastDate = d.getFullYear()-1 + "-"+ d.getMonth() + "-" + d.getDate();
-      var currentDate = d.getFullYear() + "-"+ d.getMonth() + "-" + d.getDate();
-      console.log(pastDate);
-      console.log(currentDate);
-      var url = 'https://www.quandl.com/api/v1/datasets/WIKI/'+stock+'.json?auth_token=6sdNsBCy4WWysKcaugbZ&trim_start='+pastDate+'&trim_end='+currentDate+'&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff';
-      $http.get(url).success(function(stockObj){
-        
-        $scope.chartData.push(stockObj);
+      var url = 'https://www.quandl.com/api/v1/datasets/WIKI/'+stock+'.json?auth_token=6sdNsBCy4WWysKcaugbZ&trim_start='+yearSpan.preDate()+'&trim_end='+yearSpan.curDate()+'&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff';
+      $http.get(url).success(function(stockObj){    
         
         $scope.series.push(stockObj.code);
 
@@ -31,7 +23,6 @@ angular.module('stockExchangeApp')
           if(!dup) $scope.labels.push(stat[0]);
         });
         $scope.data.push(stockStats);
-        console.log($scope.labels);
       });
     }
 
@@ -43,10 +34,15 @@ angular.module('stockExchangeApp')
     };
 
     $scope.$on('getStock', function(){
-      console.log(stockName.getStockName());
-      $scope.getStockData(stockName.getStockName());
+      $http.get('/api/stockDatas').success(function(data){
+        $scope.stocks = data;
+        $scope.stocks.forEach(function(d){
+          console.log(d._id);
+          $scope.getStockData(d._id);
+        })
+      });
     });
-
+    
     
 
   });
