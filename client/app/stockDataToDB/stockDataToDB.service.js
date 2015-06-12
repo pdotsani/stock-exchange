@@ -1,5 +1,6 @@
 'use strict';
 
+// Service that sends stock Data to the DB
 angular.module('stockExchangeApp')
   .service('stockDataToDB', function($http) {
     return {

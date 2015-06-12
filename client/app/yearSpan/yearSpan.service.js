@@ -1,5 +1,6 @@
 'use strict';
 
+// Service that calculates a full year for a data range.
 angular.module('stockExchangeApp')
   .service('yearSpan', function () {
   	var d = new Date;
