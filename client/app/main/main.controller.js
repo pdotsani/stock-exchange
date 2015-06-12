@@ -35,10 +35,6 @@ angular.module('stockExchangeApp')
       });
     }
 
-    $scope.getStockData('AAPL');
-    $scope.getStockData('GOOG');
-    $scope.getStockData('YHOO');
-
     $scope.labels = [];
     $scope.series = [];
     $scope.data = [];

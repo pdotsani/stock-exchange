@@ -1,25 +1,18 @@
 'use strict';
 
 angular.module('stockExchangeApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth, $http, stockName, $rootScope) {
-    $scope.isCollapsed = true;
-    $scope.isLoggedIn = Auth.isLoggedIn;
-    $scope.isAdmin = Auth.isAdmin;
-    $scope.getCurrentUser = Auth.getCurrentUser;
+  .controller('NavbarCtrl', function ($scope, $http, stockName, $rootScope) {
+    
     $scope.stockSymbol;
+    $scope.stocks = [];
 
     $scope.getStock = function() {
       console.log($scope.stockSymbol);
       stockName.setStockName($scope.stockSymbol);
+      $scope.stocks.push($scope.stockSymbol);
       $rootScope.$broadcast('getStock');
-    }
-
-    $scope.logout = function() {
-      Auth.logout();
-      $location.path('/login');
+      $scope.stockSymbol = '';
+      console.log($scope.stocks);
     };
-
-    $scope.isActive = function(route) {
-      return route === $location.path();
-    };
+    
   });
