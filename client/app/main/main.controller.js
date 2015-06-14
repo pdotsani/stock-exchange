@@ -50,7 +50,6 @@ angular.module('stockExchangeApp')
       $http.get('/api/stockDatas').success(function(data){
         $scope.stocks = data;
         $scope.stocks.forEach(function(d){
-          console.log(d._id);
           $scope.getStockData(d._id);
         })
       });

@@ -6,7 +6,7 @@ angular.module('stockExchangeApp')
     return {
     	sendName: function(stockName) {
     		$http.post('/api/stockDatas/',{_id: stockName}).success(function(data){
-    			console.log(data+ " :: success!")
+    			console.log(data+ " :: in DB!")
     		}).error(function(err) {
     			console.log(err);
     		});

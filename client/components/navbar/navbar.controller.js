@@ -33,7 +33,7 @@ angular.module('stockExchangeApp')
     // Removes the stock from DB, and reloads page so chart is updated.
     $scope.removeStock = function(stock) {
       $http.delete('/api/stockDatas/'+stock).success(function(){
-        console.log(stock + "removed");
+        console.log(stock + " removed");
       })
       $rootScope.$broadcast('getStock');
       $route.reload();
@@ -44,9 +44,6 @@ angular.module('stockExchangeApp')
       $http.get('/api/stockDatas/').success(function(data){
         $scope.stocks = data;
         console.log($scope.stocks);
-        $scope.stocks.forEach(function(stock){
-          stockDataToDB.sendName(stock._id);
-        });
       });
 
     });
