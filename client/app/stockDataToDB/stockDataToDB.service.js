@@ -5,9 +5,12 @@ angular.module('stockExchangeApp')
   .service('stockDataToDB', function($http) {
     return {
     	sendName: function(stockName) {
-    		$http.post('/api/stockDatas/',{_id: stockName}).success(function(data){
+    		$http
+                .post('/api/stockDatas/',{_id: stockName})
+                .success(function(data){
     			console.log(data+ " :: in DB!")
-    		}).error(function(err) {
+    		})
+            .error(function(err) {
     			console.log(err);
     		});
     	}

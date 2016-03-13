@@ -1,24 +1,20 @@
 'use strict';
 
 angular.module('stockExchangeApp')
-  .controller('MainCtrl', function ($scope, $http, yearSpan, $route) {
+  .controller('MainCtrl', function ($scope, StockSvc, yearSpan, $route) {
     
     /*
       Function retrieves stock symbol (stock) and
       collects data via json request to quandl. Data is then organized
       and sent to appropriate variables for display using chart.js.
     */ 
-    $scope.getStockData = function(stock) {
-      var url = 'https://www.quandl.com/api/v1/datasets/WIKI/'+
-      stock+'.json?auth_token=6sdNsBCy4WWysKcaugbZ&trim_start='+
-      yearSpan.preDate()+'&trim_end='+yearSpan.curDate()+
-      '&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff';
-      
-      $http.get(url).success(function(stockObj){    
-        
-        console.log($scope.series.indexOf(stockObj.code));
-        // If Statement fixes duplicate bug
-        if($scope.series.indexOf(stockObj.code)===-1) {
+    $scope.getStockData = function(stockName) {
+      var promise = StockSvc.get(stockName).$promise;
+      promise
+        .then(function(stockObj){    
+          console.log($scope.series.indexOf(stockObj.code));
+          // If Statement fixes duplicate bug
+          if($scope.series.indexOf(stockObj.code)===-1) {
           $scope.series.push(stockObj.code);
           // Set up labels & stats
           var stockStats = [];
@@ -31,9 +27,11 @@ angular.module('stockExchangeApp')
             if(!dup) $scope.labels.push(stat[0]);
           });
           $scope.data.push(stockStats);
-        };
-      });
-    }
+            };
+        }, function(err) {
+          console.warn(err);
+        });
+    };
 
     // Chart.js variables
     $scope.labels = [];
@@ -47,12 +45,16 @@ angular.module('stockExchangeApp')
         from the DB and execute getStockdata to each symbol.
      */
     $scope.$on('getStock', function(){
-      $http.get('/api/stockDatas').success(function(data){
-        $scope.stocks = data;
-        $scope.stocks.forEach(function(d){
-          $scope.getStockData(d._id);
-        })
-      });
+      var promise = StockSvc.initialize().$promise;
+      promise
+        .then(function(symbols) {
+          $scope.stocks = symbols;
+          $scope.stocks.forEach(function(sym){
+            StockSvc.get(sym._id);
+          })
+        }, function(err) {
+          console.warn(err);
+        });
     });
     
     
