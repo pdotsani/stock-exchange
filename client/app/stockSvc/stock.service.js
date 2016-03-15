@@ -5,11 +5,14 @@ angular.module('stockExchangeApp')
     function($http, $location, yearSpan) {
       return {
         get: function(stock) {
+
           var auth_token = '6sdNsBCy4WWysKcaugbZ';
+          var config = '&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff';
+          
           var url = 'https://www.quandl.com/api/v1/datasets/WIKI/'+
           stock + '.json?auth_token=' + auth_token + '&trim_start=' +
           yearSpan.preDate() + '&trim_end=' + yearSpan.curDate() +
-          '&sort_order=asc&column=4&collapse=quarterly&transformation=rdiff';
+          config;
 
           // Abstract this!
           $http
@@ -24,7 +27,7 @@ angular.module('stockExchangeApp')
         },
 
         initialize: function() {
-          
+
           // Abstract this!
           $http
             .get('/api/stockDatas')

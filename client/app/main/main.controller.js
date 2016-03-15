@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('stockExchangeApp')
-  .controller('MainCtrl', function ($scope, StockSvc, yearSpan, $route) {
+  .controller('MainCtrl', 
+    function ($scope, StockSvc, yearSpan, $route, $http) {
     
     /*
       Function retrieves stock symbol (stock) and
@@ -9,30 +10,14 @@ angular.module('stockExchangeApp')
       and sent to appropriate variables for display using chart.js.
     */ 
     $scope.getStockData = function(stockName) {
-      var promise = StockSvc.get(stockName).$promise;
-      promise
-        .then(function(stockObj){    
-          console.log($scope.series.indexOf(stockObj.code));
-          // If Statement fixes duplicate bug
-          if($scope.series.indexOf(stockObj.code)===-1) {
-          $scope.series.push(stockObj.code);
-          // Set up labels & stats
-          var stockStats = [];
-          stockObj.data.forEach(function(stat){
-            stockStats.push(stat[1]);
-            var dup = false;
-            $scope.labels.forEach(function(label){
-              if(label == stat[0]) dup = true;
-            })
-            if(!dup) $scope.labels.push(stat[0]);
-          });
-          $scope.data.push(stockStats);
-            };
-        }, function(err) {
-          console.warn(err);
-        });
+      
     };
-
+    $http.get('/api/getStocks/')
+      .then(function(data) {
+        console.log('success!', data);
+      }).catch(function(err) {
+        console.warn(err);
+      });
     // Chart.js variables
     $scope.labels = [];
     $scope.series = [];
@@ -45,16 +30,7 @@ angular.module('stockExchangeApp')
         from the DB and execute getStockdata to each symbol.
      */
     $scope.$on('getStock', function(){
-      var promise = StockSvc.initialize().$promise;
-      promise
-        .then(function(symbols) {
-          $scope.stocks = symbols;
-          $scope.stocks.forEach(function(sym){
-            StockSvc.get(sym._id);
-          })
-        }, function(err) {
-          console.warn(err);
-        });
+      
     });
     
     
