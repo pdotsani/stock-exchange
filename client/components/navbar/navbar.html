@@ -9,11 +9,11 @@
       </button>
       <a href="/" class="navbar-brand">stock-exchange</a>
       <form class="navbar-search pull-left main-search">
-        <input type="text" class="search-query" placeholder="enter symbol" ng-model="stockSymbol" ng-enter="getStock()">
+        <input type="text" class="search-query" placeholder="enter symbol" ng-model="symInput" ng-enter="getStock()">
       </form>
       <ul class="nav navbar-nav list-inline">
-        <div class='inline' ng-repeat="stock in stocks">
-          <li>{{stock._id}}<span ng-click="removeStock(stock._id)"><i class="fa fa-times"></i></span></li>
+        <div class='inline' ng-repeat="symbol in symbols">
+          <li>{{symbol}}<span ng-click="removeStock(symbol)"><i class="fa fa-times"></i></span></li>
         </div>
       </ul>
     </div>
