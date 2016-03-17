@@ -56,9 +56,13 @@ exports.index = function(req, res) {
 // Creates a new stockData in the DB.
 exports.create = function(req, res) {
   quandl(req.params.id)
-    .then(function(data) {
-      console.log('::POST:: ', data);
-      return res.status(201).json(data);
+    .then(function(doc) {
+      console.log('::POST:: ', doc);
+      Stock.create(doc, function(err, rec) {
+        if(err) return handleError(res, err);
+        console.log(':: record :: ', rec);
+        return res.status(201).json(doc);
+      });
     })
     .catch(function(err) {
       return handleError(res, err);
