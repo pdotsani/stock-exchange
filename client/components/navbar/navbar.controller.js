@@ -47,6 +47,7 @@ angular.module('stockExchangeApp')
         console.log('delete successful...', data);
         var i = $scope.symbols.indexOf(sym);
         $scope.symbols.splice(i, 1);
+        $rootScope.$broadcast('updateStocks');
       }, function(err) {
         console.warn(err);
       });

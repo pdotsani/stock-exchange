@@ -11,31 +11,41 @@ angular.module('stockExchangeApp')
         console.log(points, evt);
     };
 
-    Stocks.getAllStocks(function(all) {
-      var subLabels = [];
-      all[0].data.forEach(function(a) {
-        $scope.labels.push(a[0]);
-      });
+    function loadChart() {
+      $scope.data = [];
+      $scope.labels = [];
+      $scope.series = []; 
+      Stocks.getAllStocks(function(all) {
+        // Populate labels
+        if(all) {
+          all[0].data.forEach(function(a) {
+            $scope.labels.push(a[0]);
+          });
 
-      all.forEach(function(stockObj, i) {
-        $scope.series.push(stockObj._id);
-        var subData = [];
-        stockObj.data.forEach(function(a) {
-          subData.push(a[1]);
-        });
-        $scope.data.push(subData);
-      });
+          // Populate Data and Series
+          all.forEach(function(stockObj, i) {
+            // Series
+            $scope.series.push(stockObj._id);
+            // Data
+            var subData = [];
+              stockObj.data.forEach(function(a) {
+                subData.push(a[1]);
+              });
+              $scope.data.push(subData);
+          });
 
-      console.log('series: ', $scope.series);
-      console.log('labels: ', $scope.labels);
-      console.log('data: ', $scope.data);
-    }, function(err) {
-      // Raise error via toaster
-      console.warn(err);
-    });
+          console.log('series: ', $scope.series);
+          console.log('labels: ', $scope.labels);
+          console.log('data: ', $scope.data);
+        }
+      }, function(err) {
+        // Raise error via toaster
+        console.warn(err);
+      });
+    };
 
     // On getStock broadcast, get stock data for agregation on chart
     $scope.$on('updateStocks', function(){
-      
+      loadChart();
     });
 });

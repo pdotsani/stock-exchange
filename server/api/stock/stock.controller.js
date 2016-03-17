@@ -17,17 +17,22 @@ function getDateRange() {
 function quandl(id) {
   var url = 'https://www.quandl.com/api/v1/datasets/WIKI/';
   var token = '6sdNsBCy4WWysKcaugbZ';
-  var span = getDateRange();
   
+  console.log(getDateRange().begin);
+  console.log(getDateRange().end);
+
   return new Promise(function(resolve, reject) {
     request
       .get(url+id+'.json')
-      .query({'auth_token' : token})
-      .query({'sort_order' : 'asc'})
-      .query({'column' : '4'})
-      .query({'collapse' : 'quarterly'})
-      .query({'transformation' : 'rdiff'})
+      .query({auth_token : token})
+      .query({sort_order : 'asc'})
+      .query('start_date=' + getDateRange().begin)
+      .query('end_date=' + getDateRange().end)
+      .query({column : '4'})
+      .query({collapse : 'quarterly'})
+      .query({transformation : 'rdiff'})
       .end(function(err, data) {
+        console.log(data.res);
         if(err) reject(err);
         var body = data.res.body;
         var obj = {}; 

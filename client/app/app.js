@@ -20,6 +20,6 @@ angular.module('stockExchangeApp', [
   .config(['ChartJsProvider', function (ChartJsProvider) {
     ChartJsProvider.setOptions({
       responsive: true,
-      animationEasing: "easeInOutBounce",
+      animationEasing: "linear",
     });
   }]);
