@@ -26,7 +26,6 @@ angular.module('stockExchangeApp')
           _id: $scope.symInput
         },  function(data) {
               $rootScope.$broadcast('updateStocks');
-              delete $scope.symInput;
         },  function(err) {
               console.warn(err);
               // Create toastr warning... enter a valid stock sym
@@ -35,9 +34,11 @@ angular.module('stockExchangeApp')
         console.warn('No dups!');
         // Create toaster... no dups!
       }
+      // Clear field
+      delete $scope.symInput;
     };
 
-    // Removes the stock from DB, and reloads page so chart is updated.
+    // Removes the stock from DB, updates views
     $scope.removeStock = function(sym) {
       console.log(sym);
       Stocks.deleteStock({

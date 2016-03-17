@@ -15,4 +15,11 @@ angular.module('stockExchangeApp', [
       });
 
     $locationProvider.html5Mode(true);
-  });
+  })
+  // Chart.js settings
+  .config(['ChartJsProvider', function (ChartJsProvider) {
+    ChartJsProvider.setOptions({
+      responsive: true,
+      animationEasing: "easeInOutBounce",
+    });
+  }]);

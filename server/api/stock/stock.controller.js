@@ -6,12 +6,12 @@ var request = require('superagent');
 
 function getDateRange() {
   var d = new Date; 
-  var pastDate = d.getFullYear()-1 + 
+  var startDate = d.getFullYear()-1 + 
     "-"+ d.getMonth() + "-" + d.getDate();
-  var currentDate = d.getFullYear() + 
+  var endDate = d.getFullYear() + 
     "-"+ d.getMonth() + "-" + d.getDate();
   
-  return { pre: pastDate, cur: currentDate };
+  return { begin: startDate, end: endDate };
 };
 
 function quandl(id) {
@@ -23,8 +23,6 @@ function quandl(id) {
     request
       .get(url+id+'.json')
       .query({'auth_token' : token})
-      .query({'trim_start' : span.preDate})
-      .query({'trim_end' : span.currentDate})
       .query({'sort_order' : 'asc'})
       .query({'column' : '4'})
       .query({'collapse' : 'quarterly'})
@@ -55,8 +53,8 @@ exports.index = function(req, res) {
 exports.ids = function(req, res) {
   Stock
     .find({}, {_id:1})
-    .exec(function (err, data) {
-      var idArray = data.map(data => data.id);
+    .exec(function (err, result) {
+      var idArray = result.map(data => data.id);
       if(err) return handleError(res, err);
       return res.status(200).json(idArray);
     });
