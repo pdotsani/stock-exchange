@@ -47,9 +47,18 @@ function quandl(id) {
 exports.index = function(req, res) {
   Stock
     .find(function (err, data) {
-      if(err) { return handleError(res, err); }
-      console.log('GET: ', data);
+      if(err) return handleError(res, err);
       return res.status(200).json(data);
+    });
+};
+
+exports.ids = function(req, res) {
+  Stock
+    .find({}, {_id:1})
+    .exec(function (err, data) {
+      var idArray = data.map(data => data.id);
+      if(err) return handleError(res, err);
+      return res.status(200).json(idArray);
     });
 };
 
@@ -57,10 +66,8 @@ exports.index = function(req, res) {
 exports.create = function(req, res) {
   quandl(req.params.id)
     .then(function(doc) {
-      console.log('::POST:: ', doc);
       Stock.create(doc, function(err, rec) {
         if(err) return handleError(res, err);
-        console.log(':: record :: ', rec);
         return res.status(201).json(doc);
       });
     })

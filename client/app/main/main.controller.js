@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('stockExchangeApp')
-  .controller('MainCtrl', 
-    function ($scope, Stocks) {
+  .controller('MainCtrl', function ($scope, Stocks) {
     // Chart.js variables
     $scope.labels = [];
     $scope.series = [];
@@ -11,19 +10,9 @@ angular.module('stockExchangeApp')
         console.log(points, evt);
     };
 
-    /*  
-      On getStock broadcast, retrieve saved stock symbols 
-      from the DB and execute getStockdata to each symbol.
-     */
+    // On getStock broadcast, retrieve saved stock symbols 
+    // from the DB and execute getStockdata to each symbol.
     $scope.$on('updateStocks', function(){
-      $scope.labels = [];
-      $scope.series = [];
-      $scope.data = [];
-      Stocks.getAllStocks(
-        function(data) {
-          console.log('SUCCESS GET!', data)
-        }, function(err) {
-          console.warn(err);
-        });
+      
     });
 });
