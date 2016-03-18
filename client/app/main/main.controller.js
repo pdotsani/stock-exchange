@@ -16,6 +16,7 @@ angular.module('stockExchangeApp')
       $scope.labels = [];
       $scope.series = []; 
       Stocks.getAllStocks(function(all) {
+        console.log(all.length);
         // Populate labels
         if(all) {
           all[0].data.forEach(function(a) {
@@ -23,7 +24,7 @@ angular.module('stockExchangeApp')
           });
 
           // Populate Data and Series
-          all.forEach(function(stockObj, i) {
+          all.forEach(function(stockObj) {
             // Series
             $scope.series.push(stockObj._id);
             // Data
@@ -42,7 +43,7 @@ angular.module('stockExchangeApp')
         // Raise error via toaster
         console.warn(err);
       });
-    };
+    }
 
     // On getStock broadcast, get stock data for agregation on chart
     $scope.$on('updateStocks', function(){

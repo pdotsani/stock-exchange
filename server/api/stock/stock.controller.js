@@ -5,14 +5,14 @@ var Stock = require('../stock/stock.model');
 var request = require('superagent');
 
 function getDateRange() {
-  var d = new Date; 
+  var d = new Date(); 
   var startDate = d.getFullYear()-15 + 
     "-"+ d.getMonth() + "-" + d.getDate();
   var endDate = d.getFullYear() + 
     "-"+ d.getMonth() + "-" + d.getDate();
   
   return { begin: startDate, end: endDate };
-};
+}
 
 function quandl(id) {
   var url = 'https://www.quandl.com/api/v1/datasets/WIKI/';
@@ -44,7 +44,7 @@ function quandl(id) {
         resolve(obj);
       });
   });
-};
+}
 
 // Get list of stockDatas
 exports.index = function(req, res) {

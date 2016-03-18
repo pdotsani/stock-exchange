@@ -3,7 +3,7 @@
 angular.module('stockExchangeApp')
   .controller('NavbarCtrl', function ($scope, $rootScope, Stocks) {
     // Scope variable for user input
-    $scope.symInput;
+    $scope.symInput = '';
     $scope.symbols = [];
 
     // Load all stock syms into navbar
@@ -16,7 +16,7 @@ angular.module('stockExchangeApp')
         }, function(err) {
           console.warn(err);
         });
-    };
+    }
 
     // Retrieves stock symbol entered by user and starts 'getStock'
     // broadcast to trigger graph placement and DB storage.
@@ -24,7 +24,7 @@ angular.module('stockExchangeApp')
       if($scope.symbols.indexOf($scope.symInput) < 0) {
         Stocks.addStock({
           _id: $scope.symInput
-        },  function(data) {
+        },  function() {
               $rootScope.$broadcast('updateStocks');
         },  function(err) {
               console.warn(err);

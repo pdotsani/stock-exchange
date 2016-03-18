@@ -8,7 +8,7 @@ angular.module('stockExchangeApp', [
   'ui.bootstrap',
   'chart.js'
 ])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
+  .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .otherwise({
         redirectTo: '/'
@@ -20,6 +20,6 @@ angular.module('stockExchangeApp', [
   .config(['ChartJsProvider', function (ChartJsProvider) {
     ChartJsProvider.setOptions({
       responsive: true,
-      animationEasing: "linear",
+      animationEasing: 'linear',
     });
   }]);
