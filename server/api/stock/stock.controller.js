@@ -6,7 +6,7 @@ var request = require('superagent');
 
 function getDateRange() {
   var d = new Date; 
-  var startDate = d.getFullYear()-1 + 
+  var startDate = d.getFullYear()-15 + 
     "-"+ d.getMonth() + "-" + d.getDate();
   var endDate = d.getFullYear() + 
     "-"+ d.getMonth() + "-" + d.getDate();
@@ -26,8 +26,8 @@ function quandl(id) {
       .get(url+id+'.json')
       .query({auth_token : token})
       .query({sort_order : 'asc'})
-      .query('start_date=' + getDateRange().begin)
-      .query('end_date=' + getDateRange().end)
+      .query({trim_start : getDateRange().begin})
+      .query({trim_end : getDateRange().end})
       .query({column : '4'})
       .query({collapse : 'quarterly'})
       .query({transformation : 'rdiff'})
