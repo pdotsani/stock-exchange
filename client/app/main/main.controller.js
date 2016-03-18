@@ -12,13 +12,15 @@ angular.module('stockExchangeApp')
     };
 
     function loadChart() {
-      $scope.data = [];
-      $scope.labels = [];
-      $scope.series = []; 
+      
       Stocks.getAllStocks(function(all) {
+        $scope.data = [];
+        $scope.labels = [];
+        $scope.series = [];
+
         console.log(all.length);
         // Populate labels
-        if(all) {
+        if(all.length > 0) {
           all[0].data.forEach(function(a) {
             $scope.labels.push(a[0]);
           });
