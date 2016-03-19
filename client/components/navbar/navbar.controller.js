@@ -6,6 +6,7 @@ angular.module('stockExchangeApp')
     $scope.symInput = '';
     $scope.symbols = [];
     $scope.error = false;
+    $scope.status = false;
 
     // Load all stock syms into navbar
     function symsToNavbar() {
@@ -19,28 +20,40 @@ angular.module('stockExchangeApp')
         });
     }
 
+    // Refactor these later...
     function resetError(){
       delete $scope.message;
       $scope.error = false;
     }
 
+    function resetStatus(){
+      delete $scope.statusMessage;
+      $scope.status = false;
+    }
+
     function errorMessage(message) {
       $scope.error = true;
       $scope.message = message;
-      setTimeout(function(){
-        resetError();
-      }, 5000);
+    }
+
+    function statusMessage(message) {
+      $scope.status = true;
+      $scope.statusMessage = message;
     }
 
     // Retrieves stock symbol entered by user and starts 'getStock'
     // broadcast to trigger graph placement and DB storage.
     $scope.getStock = function() {
-      $scope.symInput.toUpperCase()
+      resetError();
+      resetStatus();
+      $scope.symInput.toUpperCase();
+      statusMessage('Fetching stock');
       if($scope.symbols.indexOf($scope.symInput) < 0) {
         Stocks.addStock({
           _id: $scope.symInput.toUpperCase()
         },  function() {
               $rootScope.$broadcast('updateStocks');
+              resetStatus();
         },  function(err) {
               errorMessage('Enter a valid stock symbol');
         });
@@ -54,13 +67,14 @@ angular.module('stockExchangeApp')
     // Removes the stock from DB, updates views
     $scope.removeStock = function(sym) {
       console.log(sym);
+      statusMessage('Removing stock');
       Stocks.deleteStock({
         id: sym
       }, function(data) {
-        console.log('delete successful...', data);
         var i = $scope.symbols.indexOf(sym);
         $scope.symbols.splice(i, 1);
         $rootScope.$broadcast('updateStocks');
+        resetStatus();
       }, function(err) {
         errorMessage('delete failed');
       });
