@@ -54,7 +54,7 @@ angular.module('stockExchangeApp')
         },  function() {
               $rootScope.$broadcast('updateStocks');
               resetStatus();
-        },  function(err) {
+        },  function() {
               errorMessage('Enter a valid stock symbol');
         });
       } else {
@@ -70,12 +70,12 @@ angular.module('stockExchangeApp')
       statusMessage('Removing stock');
       Stocks.deleteStock({
         id: sym
-      }, function(data) {
+      }, function() {
         var i = $scope.symbols.indexOf(sym);
         $scope.symbols.splice(i, 1);
         $rootScope.$broadcast('updateStocks');
         resetStatus();
-      }, function(err) {
+      }, function() {
         errorMessage('delete failed');
       });
     };
