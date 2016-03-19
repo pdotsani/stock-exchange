@@ -6,8 +6,10 @@ angular.module('stockExchangeApp')
     // Chart.js vars
     $scope.data = [];
     $scope.labels = [];
-    $scope.series = []; 
+    $scope.series = [];
+    
     $scope.onClick = function (points, evt) {
+        // Add tooltip here
         console.log(points, evt);
     };
 
@@ -18,9 +20,8 @@ angular.module('stockExchangeApp')
         $scope.labels = [];
         $scope.series = [];
 
-        console.log(all.length);
-        // Populate labels
         if(all.length > 0) {
+        // Populate labels
           all[0].data.forEach(function(a) {
             $scope.labels.push(a[0]);
           });
@@ -37,13 +38,10 @@ angular.module('stockExchangeApp')
               $scope.data.push(subData);
           });
 
-          console.log('series: ', $scope.series);
-          console.log('labels: ', $scope.labels);
-          console.log('data: ', $scope.data);
+          // console.log('series: ', $scope.series);
+          // console.log('labels: ', $scope.labels);
+          // console.log('data: ', $scope.data);
         }
-      }, function(err) {
-        // Raise error via toaster
-        console.warn(err);
       });
     }
 

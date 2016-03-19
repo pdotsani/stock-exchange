@@ -5,6 +5,7 @@ angular.module('stockExchangeApp')
     // Scope variable for user input
     $scope.symInput = '';
     $scope.symbols = [];
+    $scope.error = false;
 
     // Load all stock syms into navbar
     function symsToNavbar() {
@@ -18,21 +19,33 @@ angular.module('stockExchangeApp')
         });
     }
 
+    function resetError(){
+      delete $scope.message;
+      $scope.error = false;
+    }
+
+    function errorMessage(message) {
+      $scope.error = true;
+      $scope.message = message;
+      setTimeout(function(){
+        resetError();
+      }, 5000);
+    }
+
     // Retrieves stock symbol entered by user and starts 'getStock'
     // broadcast to trigger graph placement and DB storage.
     $scope.getStock = function() {
+      $scope.symInput.toUpperCase()
       if($scope.symbols.indexOf($scope.symInput) < 0) {
         Stocks.addStock({
-          _id: $scope.symInput
+          _id: $scope.symInput.toUpperCase()
         },  function() {
               $rootScope.$broadcast('updateStocks');
         },  function(err) {
-              console.warn(err);
-              // Create toastr warning... enter a valid stock sym
+              errorMessage('Enter a valid stock symbol');
         });
       } else {
-        console.warn('No dups!');
-        // Create toaster... no dups!
+        errorMessage('no dups');
       }
       // Clear field
       delete $scope.symInput;
@@ -49,7 +62,7 @@ angular.module('stockExchangeApp')
         $scope.symbols.splice(i, 1);
         $rootScope.$broadcast('updateStocks');
       }, function(err) {
-        console.warn(err);
+        errorMessage('delete failed');
       });
     };
 
